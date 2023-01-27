@@ -1,22 +1,19 @@
 package org.devs.crm.dao.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.devs.crm.dao.StudentDao;
 import org.devs.crm.model.Student;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
-
 @Component
+@RequiredArgsConstructor
 public class StudentDaoImpl implements StudentDao {
 
-    @Autowired
-    public DataSource dataSource;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
     public Student findById(Long id) {
@@ -30,7 +27,6 @@ public class StudentDaoImpl implements StudentDao {
                 "VALUES(:fname, :lname, :patronymic, :email, :phoneNumber)";
 
         KeyHolder holder = new GeneratedKeyHolder();
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 
         MapSqlParameterSource source = new MapSqlParameterSource()
                 .addValue("fname", student.getFirstName())
