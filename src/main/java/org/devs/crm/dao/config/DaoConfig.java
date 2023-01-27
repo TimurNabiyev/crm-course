@@ -18,7 +18,7 @@ public class DaoConfig {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("sherbek95.");
+        dataSource.setPassword("..");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/crm");
         return dataSource;
     }
@@ -28,7 +28,7 @@ public class DaoConfig {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("sherbek95.");
+        dataSource.setPassword("..");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/crm");
         return dataSource;
     }
