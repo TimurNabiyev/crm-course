@@ -2,5 +2,3 @@
 /shelf/
 /.idea/workspace.xml
 .idea
-**/.env
-/target/
