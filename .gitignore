@@ -1,5 +1,10 @@
-# Default ignored files
-/shelf/
+#Maven specific modules
+**/target/
+
+**.jar
+
+# Idea specific modules
 .idea
-target
+
+# Properties config
 **/.env
