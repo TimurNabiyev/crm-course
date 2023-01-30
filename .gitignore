@@ -1,7 +1,5 @@
 #Maven specific modules
-**/target/
-
-**.jar
+target
 
 # Idea specific modules
 .idea
