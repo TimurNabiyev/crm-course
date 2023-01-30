@@ -1,5 +1,5 @@
 # Default ignored files
 /shelf/
 .idea
-**/.env
-/target/**
+/target/
+/src/main/resources/.env
