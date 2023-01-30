@@ -1,5 +1,6 @@
 package org.devs.crm.dao.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.devs.crm.dao.MentorDao;
 import org.devs.crm.model.Mentor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,27 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 
 @Component
+@RequiredArgsConstructor
 public class MentorDaoImpl implements MentorDao {
-    @Autowired
-    public DataSource dataSource;
-
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     @Override
     public Mentor findById(Long id) {
-        return null;
+        String query = "SELECT * FROM tb_mentors m " +
+                "JOIN tb_cources c ON m.course_id = c.id " +
+                "WHERE id = :id";
+
+        return namedParameterJdbcTemplate.query(query, new MapSqlParameterSource("id", id), (rs, rowNum) -> {
+            System.out.println(rowNum);
+            Mentor mentor = new Mentor();
+            mentor.setId(rs.getLong("m.id"));
+            mentor.setFirstName(rs.getString("m.firstName"));
+            mentor.setLastName(rs.getString("m.lastName"));
+            mentor.setPatronymic(rs.getString("m.patronymic"));
+            mentor.setEmail(rs.getString("m.email"));
+            mentor.setPhoneNumber(rs.getString("m.phoneNumber"));
+            mentor.setSalary(rs.getBigDecimal("m.salary"));
+            return mentor;
+        }).get(0);
     }
 
     @Override
@@ -28,7 +43,6 @@ public class MentorDaoImpl implements MentorDao {
                 "VALUES(:fname, :lname, :patronymic, :email, :phoneNumber, :salary)";
 
         KeyHolder holder = new GeneratedKeyHolder();
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 
         MapSqlParameterSource source = new MapSqlParameterSource()
                 .addValue("fname", mentor.getFirstName())

@@ -16,8 +16,8 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public Group findById(Long id) {
         String query = "SELECT * FROM tb_groups g " +
-                "JOIN tb_cources c ON g.course_id = c.id " +
-                "WHERE id = :id";
+                "JOIN tb_courses c ON g.course_id = c.id " +
+                "WHERE g.id = :id";
 
         return namedParameterJdbcTemplate.query(query, new MapSqlParameterSource("id", id), (rs, rowNum) -> {
             System.out.println(rowNum);
