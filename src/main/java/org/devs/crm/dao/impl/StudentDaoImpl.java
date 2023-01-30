@@ -17,7 +17,19 @@ public class StudentDaoImpl implements StudentDao {
 
     @Override
     public Student findById(Long id) {
-        return null;
+        String query = "SELECT * FROM tb_students WHERE id = :id";
+
+        return namedParameterJdbcTemplate.query(query, new MapSqlParameterSource("id", id), (rs, rowNum) -> {
+            System.out.println(rowNum);
+            Student student = new Student();
+            student.setId(rs.getLong("id"));
+            student.setFirstName(rs.getString("first_name"));
+            student.setLastName(rs.getString("last_name"));
+            student.setPatronymic(rs.getString("patronymic"));
+            student.setEmail(rs.getString("email"));
+            student.setPhoneNumber(rs.getString("phone_number"));
+            return student;
+        }).get(0);
     }
 
     @Override
