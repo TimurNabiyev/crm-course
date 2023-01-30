@@ -12,11 +12,11 @@ public class CrmApplication {
         StudentDao studentDao = context.getBean("studentDaoImpl", StudentDao.class);
 
         Student student = new Student();
-        student.setFirstName(" John");
-        student.setLastName(" Doe");
-        student.setPatronymic(" Something");
-        student.setEmail(" doe@gmail.com");
-        student.setPhoneNumber(" +999 999 999 999");
+        student.setFirstName("John");
+        student.setLastName("Doe");
+        student.setPatronymic("Something");
+        student.setEmail("doe@gmail.com");
+        student.setPhoneNumber("+999 999 999 999");
 
         studentDao.save(student);
 
