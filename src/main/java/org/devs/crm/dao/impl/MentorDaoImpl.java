@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -42,5 +43,11 @@ public class MentorDaoImpl implements MentorDao {
         namedParameterJdbcTemplate.update(MentorQuery.SAVE_MENTOR, source, keyHolder, new String[]{"id"});
 
         return mentor;
+    }
+
+    @Override
+    public List<Mentor> findAllByGroupId(Long groupId) {
+        return namedParameterJdbcTemplate.query(MentorQuery.SELECT_ALL_BY_GROUP,
+                new MapSqlParameterSource("id", groupId), mentorRowMapper);
     }
 }

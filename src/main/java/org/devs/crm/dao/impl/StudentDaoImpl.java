@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -42,5 +43,11 @@ public class StudentDaoImpl implements StudentDao {
         student.setId(holder.getKey().longValue());
 
         return student;
+    }
+
+    @Override
+    public List<Student> findAllByGroupId(Long groupId) {
+        return namedParameterJdbcTemplate.query(StudentQuery.SELECT_ALL_BY_GROUP,
+                new MapSqlParameterSource().addValue("id", groupId), studentRowMapper);
     }
 }
