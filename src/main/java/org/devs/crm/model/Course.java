@@ -1,9 +1,6 @@
 package org.devs.crm.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -11,7 +8,9 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @ToString
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Course {
 
     private Long id;

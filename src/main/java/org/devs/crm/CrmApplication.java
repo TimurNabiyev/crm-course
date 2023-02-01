@@ -1,25 +1,28 @@
 package org.devs.crm;
 
-import org.devs.crm.dao.StudentDao;
+import org.devs.crm.dao.MentorDao;
 import org.devs.crm.dao.config.DaoConfig;
-import org.devs.crm.model.Student;
+import org.devs.crm.model.Mentor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.math.BigDecimal;
 
 public class CrmApplication {
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(DaoConfig.class);
-        StudentDao studentDao = context.getBean("studentDaoImpl", StudentDao.class);
+        MentorDao mentorDao = context.getBean("mentorDaoImpl", MentorDao.class);
 
-        Student student = new Student();
-        student.setFirstName("John");
-        student.setLastName("Doe");
-        student.setPatronymic("Something");
-        student.setEmail("doe@gmail.com");
-        student.setPhoneNumber("+999 999 999 999");
+        Mentor mentor = new Mentor();
+        mentor.setFirstName("John");
+        mentor.setLastName("Doe");
+        mentor.setPatronymic("Something");
+        mentor.setEmail("doe@gmail.com");
+        mentor.setPhoneNumber("+999 999 999 999");
+        mentor.setSalary(BigDecimal.valueOf(54645554.46546546546556));
 
-        studentDao.save(student);
+        mentorDao.save(mentor);
 
-        System.out.println(student);
+        System.out.println(mentor);
     }
 }
