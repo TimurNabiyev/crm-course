@@ -1,8 +1,10 @@
 package org.devs.crm.dao;
 
+import java.util.Optional;
+
 public interface BaseDao<T> {
 
-    T findById(Long id);
+    Optional<T> findById(Long id);
     T save(T t);
 
 }
