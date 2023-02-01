@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan(basePackages = "org.devs.crm")
-@PropertySource("classpath*:application.properties")
+@PropertySource("application.properties")
 public class DaoConfig {
 
     @Value("${spring.datasource.driver}")
