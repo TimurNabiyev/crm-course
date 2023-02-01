@@ -2,6 +2,8 @@ package org.devs.crm.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.devs.crm.dao.StudentDao;
+import org.devs.crm.dao.impl.query.StudentQuery;
+import org.devs.crm.dao.impl.rowMapper.StudentRowMapper;
 import org.devs.crm.model.Student;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -9,28 +11,21 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class StudentDaoImpl implements StudentDao {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
+    private final StudentRowMapper studentRowMapper;
     @Override
-    public Student findById(Long id) {
-        String query = "SELECT * FROM tb_students WHERE id = :id";
+    public Optional<Student> findById(Long id) {
+        return namedParameterJdbcTemplate.query(StudentQuery.SELECT_ONE,
+                new MapSqlParameterSource("id", id), studentRowMapper).stream().findFirst();
+        }
 
-        return namedParameterJdbcTemplate.query(query, new MapSqlParameterSource("id", id), (rs, rowNum) -> {
-            System.out.println(rowNum);
-            Student student = new Student();
-            student.setId(rs.getLong("id"));
-            student.setFirstName(rs.getString("first_name"));
-            student.setLastName(rs.getString("last_name"));
-            student.setPatronymic(rs.getString("patronymic"));
-            student.setEmail(rs.getString("email"));
-            student.setPhoneNumber(rs.getString("phone_number"));
-            return student;
-        }).get(0);
-    }
+
 
     @Override
     public Student save(Student student) {

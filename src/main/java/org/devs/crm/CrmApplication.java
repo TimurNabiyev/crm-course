@@ -1,10 +1,8 @@
 package org.devs.crm;
 
 import org.devs.crm.dao.MentorDao;
-import org.devs.crm.dao.StudentDao;
 import org.devs.crm.dao.config.DaoConfig;
 import org.devs.crm.model.Mentor;
-import org.devs.crm.model.Student;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
