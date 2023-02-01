@@ -1,5 +1,8 @@
-# Default ignored files
-/shelf/
-/.idea/workspace.xml
-*.env
+#Maven specific modules
+target
+
+# Idea specific modules
 .idea
+
+# Properties config
+/src/main/resources/.env
