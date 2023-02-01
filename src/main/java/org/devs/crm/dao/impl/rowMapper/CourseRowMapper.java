@@ -1,6 +1,7 @@
 package org.devs.crm.dao.impl.rowMapper;
 
 import org.devs.crm.model.Course;
+
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ public class CourseRowMapper implements RowMapper<Course> {
     public Course mapRow(ResultSet rs, int rowNum) throws SQLException {
         return Course.builder()
                 .id(rs.getLong("id"))
-                .name(rs.getString("name"))
+                .name(rs.getString("fname"))
                 .subject(rs.getString("subject"))
                 .courseDurationInMonth(rs.getInt("course_duration_in_month"))
                 .lessonDuration(rs.getTime("lesson_duration").toLocalTime())

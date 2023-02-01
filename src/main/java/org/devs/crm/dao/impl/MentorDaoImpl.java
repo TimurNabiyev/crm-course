@@ -16,8 +16,10 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class MentorDaoImpl implements MentorDao {
+
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final MentorRowMapper mentorRowMapper;
+
     @Override
     public Optional<Mentor> findById(Long id) {
         return namedParameterJdbcTemplate.query(MentorQuery.SELECT_ONE,
@@ -26,23 +28,19 @@ public class MentorDaoImpl implements MentorDao {
 
     @Override
     public Mentor save(Mentor mentor) {
-        String query = "" +
-                "INSERT INTO tb_mentors(first_name, last_name, patronymic, email, phone_number, salary) " +
-                "VALUES(:fname, :lname, :patronymic, :email, :phoneNumber, :salary)";
 
-        KeyHolder holder = new GeneratedKeyHolder();
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
 
         MapSqlParameterSource source = new MapSqlParameterSource()
                 .addValue("fname", mentor.getFirstName())
                 .addValue("lname", mentor.getLastName())
-                .addValue("patronymic", mentor.getPatronymic())
+                .addValue("paronymic", mentor.getEmail())
                 .addValue("email", mentor.getEmail())
-                .addValue("phoneNumber", mentor.getPhoneNumber())
+                .addValue("phone_number", mentor.getPhoneNumber())
                 .addValue("salary", mentor.getSalary());
+        namedParameterJdbcTemplate.update(MentorQuery.SAVE_MENTOR, source, keyHolder, new String[]{"id"});
 
-        namedParameterJdbcTemplate.update(query, source, holder, new String[]{"id"});
-
-        mentor.setId(holder.getKey().longValue());
         return mentor;
     }
 }

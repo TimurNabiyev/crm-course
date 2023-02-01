@@ -19,6 +19,7 @@ public class StudentDaoImpl implements StudentDao {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final StudentRowMapper studentRowMapper;
+
     @Override
     public Optional<Student> findById(Long id) {
         return namedParameterJdbcTemplate.query(StudentQuery.SELECT_ONE,
@@ -26,13 +27,8 @@ public class StudentDaoImpl implements StudentDao {
         }
 
 
-
     @Override
     public Student save(Student student) {
-        String query = "" +
-                "INSERT INTO tb_students(first_name, last_name, patronymic, email, phone_number) " +
-                "VALUES(:fname, :lname, :patronymic, :email, :phoneNumber)";
-
         KeyHolder holder = new GeneratedKeyHolder();
 
         MapSqlParameterSource source = new MapSqlParameterSource()
@@ -42,9 +38,9 @@ public class StudentDaoImpl implements StudentDao {
                 .addValue("email", student.getEmail())
                 .addValue("phoneNumber", student.getPhoneNumber());
 
-        namedParameterJdbcTemplate.update(query, source, holder, new String[]{"id"});
-
+        namedParameterJdbcTemplate.update(StudentQuery.SAVE_STUDENT, source, holder, new String[]{"id"});
         student.setId(holder.getKey().longValue());
+
         return student;
     }
 }
