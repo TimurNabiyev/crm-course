@@ -7,8 +7,8 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
-@ToString
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Course {
@@ -21,3 +21,5 @@ public class Course {
     private BigDecimal coursePrice;
 
 }
+
+

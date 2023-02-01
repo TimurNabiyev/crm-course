@@ -1,16 +1,15 @@
 package org.devs.crm.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class Student {
 
     private Long id;
