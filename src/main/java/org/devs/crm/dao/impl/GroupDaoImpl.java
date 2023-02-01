@@ -24,8 +24,11 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public Optional<Group> findById(Long id) {
-        return namedParameterJdbcTemplate.query(GroupQuery.SELECT_ONE,
-                new MapSqlParameterSource("id", id), groupRowMapper).stream().findFirst();
+         return namedParameterJdbcTemplate.query(GroupQuery.SELECT_ONE,
+                new MapSqlParameterSource("id", id), groupRowMapper).stream().peek(group -> {
+                    group.setMentors(mentorDao.findAllByGroupId(id));
+                    group.setStudents(studentDao.findAllByGroupId(id));
+         }).findFirst();
     }
 
     @Override
