@@ -1,25 +1,19 @@
 package org.devs.crm;
 
-import org.devs.crm.dao.StudentDao;
+import org.devs.crm.dao.GroupDao;
 import org.devs.crm.dao.config.DaoConfig;
-import org.devs.crm.model.Student;
+import org.devs.crm.dao.impl.GroupDaoImpl;
+import org.devs.crm.model.Course;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 public class CrmApplication {
     public static void main(String[] args) {
+
         ApplicationContext context = new AnnotationConfigApplicationContext(DaoConfig.class);
-        StudentDao studentDao = context.getBean("studentDaoImpl", StudentDao.class);
+        GroupDao groupDao = context.getBean(GroupDao.class);
 
-        Student student = new Student();
-        student.setFirstName("John");
-        student.setLastName("Doe");
-        student.setPatronymic("Something");
-        student.setEmail("doe@gmail.com");
-        student.setPhoneNumber("+999 999 999 999");
-
-        studentDao.save(student);
-
-        System.out.println(student);
+        System.out.println(groupDao.findById(1L));
     }
 }
