@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GroupDaoImpl implements GroupDao {
 
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate; // null
     private final GroupRowMapper groupRowMapper;
     private final StudentDao studentDao;
     private final MentorDao mentorDao;

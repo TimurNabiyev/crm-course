@@ -13,20 +13,12 @@ import javax.sql.DataSource;
 @PropertySource("application.properties")
 public class DaoConfig {
 
-    @Value("${spring.datasource.driver}")
     private String driver;
-
-    @Value("${spring.datasource.username}")
     private String username;
-
-    @Value("${spring.datasource.password}")
     private String password;
-
-    @Value("${spring.datasource.url}")
     private String url;
 
     @Bean
-    @Primary
     public DataSource postgresqlDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(driver);
@@ -40,5 +32,25 @@ public class DaoConfig {
     @Autowired
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    @Value("${spring.datasource.driver}")
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    @Value("${spring.datasource.username}")
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Value("${spring.datasource.password}")
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Value("${spring.datasource.url}")
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

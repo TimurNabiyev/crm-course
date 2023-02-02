@@ -39,7 +39,8 @@ public class CourseDaoImpl implements CourseDao {
                 .addValue("lesson_duration", course.getLessonDuration())
                 .addValue("course_price", course.getCoursePrice());
         namedParameterJdbcTemplate.update(CourseQuery.SAVE_COURSE, source, keyHolder, new String[]{"id"});
-
+        course.setId(keyHolder.getKeyAs(Long.class));
+        
         return course;
     }
 }
