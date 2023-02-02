@@ -10,13 +10,14 @@ import java.sql.SQLException;
 
 @Component
 public class CourseRowMapper implements RowMapper<Course> {
+
     @Override
     public Course mapRow(ResultSet rs, int rowNum) throws SQLException {
         return Course.builder()
                 .id(rs.getLong("id"))
-                .name(rs.getString("fname"))
+                .name(rs.getString("name"))
                 .subject(rs.getString("subject"))
-                .courseDurationInMonth(rs.getInt("course_durantion_in_month"))
+                .courseDurationInMonth(rs.getInt("course_duration_in_month"))
                 .lessonDuration(rs.getTime("lesson_duration").toLocalTime())
                 .coursePrice(rs.getBigDecimal("course_price"))
                 .build();

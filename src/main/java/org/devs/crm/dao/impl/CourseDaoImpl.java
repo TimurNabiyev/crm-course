@@ -22,12 +22,14 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public Optional<Course> findById(Long id) {
+
         return namedParameterJdbcTemplate.query(CourseQuery.SELECT_ONE,
                 new MapSqlParameterSource("id", id), courseRowMapper).stream().findFirst();
     }
 
     @Override
     public Course save(Course course) {
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         MapSqlParameterSource source = new MapSqlParameterSource()

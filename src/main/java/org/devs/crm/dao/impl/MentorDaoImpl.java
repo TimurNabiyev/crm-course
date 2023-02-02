@@ -1,19 +1,17 @@
 package org.devs.crm.dao.impl;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.devs.crm.dao.MentorDao;
 import org.devs.crm.dao.impl.query.MentorQuery;
 import org.devs.crm.dao.impl.rowMapper.MentorRowMapper;
 import org.devs.crm.model.Mentor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -31,7 +29,9 @@ public class MentorDaoImpl implements MentorDao {
 
     @Override
     public Mentor save(Mentor mentor) {
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
+
 
         MapSqlParameterSource source = new MapSqlParameterSource()
                 .addValue("fname", mentor.getFirstName())
@@ -43,5 +43,11 @@ public class MentorDaoImpl implements MentorDao {
         namedParameterJdbcTemplate.update(MentorQuery.SAVE_MENTOR, source, keyHolder, new String[]{"id"});
 
         return mentor;
+    }
+
+    @Override
+    public List<Mentor> findAllByGroupId(Long groupId) {
+        return namedParameterJdbcTemplate.query(MentorQuery.SELECT_ALL_BY_GROUP,
+                new MapSqlParameterSource("id", groupId), mentorRowMapper);
     }
 }
