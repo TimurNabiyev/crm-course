@@ -8,6 +8,7 @@
 
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
     <modules>
         <module>data</module>
         <module>business</module>
@@ -16,5 +17,9 @@
     <name>crm</name>
     <url>http://maven.apache.org</url>
 
+    <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+    </properties>
 
 </project>
