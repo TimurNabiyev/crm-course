@@ -18,7 +18,7 @@ public class GroupRowMapper implements RowMapper<Group> {
     public Group mapRow(ResultSet rs, int rowNum) throws SQLException {
         return Group.builder()
                 .id(rs.getLong("id"))
-                .starDate(rs.getDate("start_date").toLocalDate())
+                .startDate(rs.getDate("start_date").toLocalDate())
                 .course(courseRowMapper.mapRow(rs, rowNum))
                 .build();
     }

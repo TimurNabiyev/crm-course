@@ -47,7 +47,7 @@ public class StudentDaoImpl implements StudentDao {
                 .addValue("phoneNumber", student.getPhoneNumber());
 
         namedParameterJdbcTemplate.update(StudentQuery.SAVE_STUDENT, source, holder, new String[]{"id"});
-        student.setId(holder.getKey().longValue());
+        student.setId(holder.getKeyAs(Long.class));
 
         return student;
     }
