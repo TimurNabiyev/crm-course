@@ -14,9 +14,10 @@ import java.util.List;
 public class Group {
 
     private Long id;
+    private String groupName;
     private Course course;
     private List<Student> students;
     private List<Mentor> mentors;
-    private LocalDate starDate;
+    private LocalDate startDate;
 
 }
