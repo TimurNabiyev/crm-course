@@ -14,7 +14,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +37,6 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    @Transactional
     public Group save(Group group) {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();

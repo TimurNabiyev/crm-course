@@ -42,3 +42,6 @@ public class DaoConfig {
         return new NamedParameterJdbcTemplate(dataSource);
     }
 }
+
+// CRUD(DML): CREATE(INSERT) READ(SELECT) UPDATE(UPDATE) DELETE(DELETE)
+// DDL: CREATE, DROP, ALTER, TRUNCATE(DROP, CREATE)
