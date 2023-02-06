@@ -3,7 +3,8 @@
 
 /data/src/main/resources/.env
 /business/src/main/resources/.env
-/src/main/resources/.env
+
+/data/src/test/resources/.env
 
 /target/
 /data/target/
