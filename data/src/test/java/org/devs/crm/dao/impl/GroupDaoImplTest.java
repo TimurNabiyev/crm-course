@@ -67,8 +67,8 @@ class GroupDaoImplTest {
         Assertions.assertThatNullPointerException().isThrownBy(() -> groupDao.save(group));
     }
 
-    void shouldNotFindById() {
-
+    void shouldNotFindById(Group group) {
+        Assertions.assertThat(group).isNull();
     }
 
     void shouldSaveNew() {
