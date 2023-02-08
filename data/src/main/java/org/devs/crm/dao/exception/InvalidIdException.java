@@ -2,8 +2,8 @@ package org.devs.crm.dao.exception;
 
 import org.springframework.dao.DataAccessException;
 
-public class EntityNotFoundException extends DataAccessException {
-    public EntityNotFoundException(String msg) {
+public class InvalidIdException extends DataAccessException {
+    public InvalidIdException(String msg) {
         super(msg);
     }
 }
