@@ -66,7 +66,8 @@ class GroupDaoImplTest {
     void shouldThrowExceptionOnFindById(Group group) {
         Assertions.assertThatNullPointerException().isThrownBy(() -> groupDao.save(group));
     }
-
+    @ParameterizedTest
+    @MethodSource("")
     void shouldNotFindById(Group group) {
         Assertions.assertThat(group).isNull();
     }
