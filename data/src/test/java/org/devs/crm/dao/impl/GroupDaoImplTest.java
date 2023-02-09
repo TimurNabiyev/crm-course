@@ -95,6 +95,7 @@ class GroupDaoImplTest {
         Assertions.assertThat(optionalCourse).isNotNull();
         Assertions.assertThat(optionalCourse.isPresent()).isTrue();
 
+
         Assertions.assertThat(students).usingRecursiveComparison().isEqualTo(group.getStudents());
         Assertions.assertThat(mentors).usingRecursiveComparison().isEqualTo(group.getMentors());
         Assertions.assertThat(optionalCourse.get()).usingRecursiveComparison().isEqualTo(group.getCourse());
@@ -133,8 +134,8 @@ class GroupDaoImplTest {
 
     private static Stream<Arguments> groupsProviderGenerateException() {
         return IntStream.range(1, 51).mapToObj(index -> Arguments.of(Group.builder()
-                        .groupName("Group #" + index)
-                        .startDate(LocalDate.now().plusDays(index))
+                .groupName("Group #" + index)
+                .startDate(LocalDate.now().plusDays(index))
                 .build()));
     }
 

@@ -32,15 +32,15 @@ public class MentorDaoImpl implements MentorDao {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-
         MapSqlParameterSource source = new MapSqlParameterSource()
-                .addValue("fname", mentor.getFirstName())
-                .addValue("lname", mentor.getLastName())
-                .addValue("paronymic", mentor.getEmail())
+                .addValue("first_name", mentor.getFirstName())
+                .addValue("last_name", mentor.getLastName())
+                .addValue("patronymic", mentor.getEmail())
                 .addValue("email", mentor.getEmail())
                 .addValue("phone_number", mentor.getPhoneNumber())
                 .addValue("salary", mentor.getSalary());
         namedParameterJdbcTemplate.update(MentorQuery.SAVE_MENTOR, source, keyHolder, new String[]{"id"});
+        mentor.setId(keyHolder.getKeyAs(Long.class));
 
         return mentor;
     }
