@@ -10,9 +10,9 @@ import org.devs.crm.dao.exception.InvalidIdException;
 import org.devs.crm.dao.exception.NullParameterPassedException;
 import org.devs.crm.dao.impl.query.GroupQuery;
 import org.devs.crm.dao.impl.rowMapper.GroupRowMapper;
-import org.devs.crm.model.Group;
-import org.devs.crm.model.Mentor;
-import org.devs.crm.model.Student;
+import org.devs.crm.entity.Group;
+import org.devs.crm.entity.Mentor;
+import org.devs.crm.entity.Student;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -72,11 +72,10 @@ public class GroupDaoImpl implements GroupDao {
         return group;
     }
 
-
     private void saveToStudentJunction(List<Student> students, Long groupId) {
-        MapSqlParameterSource[] sources = students.stream().map(mentor -> new MapSqlParameterSource()
+        MapSqlParameterSource[] sources = students.stream().map(student -> new MapSqlParameterSource()
                 .addValue("group_id", groupId)
-                .addValue("student_id", mentor.getId())).toArray(MapSqlParameterSource[]::new);
+                .addValue("student_id", student.getId())).toArray(MapSqlParameterSource[]::new);
 
         namedParameterJdbcTemplate.batchUpdate(GroupQuery.INSERT_STUDENTS_JUNCTION, sources);
     }

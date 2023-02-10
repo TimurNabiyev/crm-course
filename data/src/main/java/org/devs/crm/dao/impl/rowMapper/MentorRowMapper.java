@@ -1,6 +1,6 @@
 package org.devs.crm.dao.impl.rowMapper;
 
-import org.devs.crm.model.Mentor;
+import org.devs.crm.entity.Mentor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 

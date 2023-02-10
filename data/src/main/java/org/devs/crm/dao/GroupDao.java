@@ -3,7 +3,7 @@ package org.devs.crm.dao;
 import org.devs.crm.dao.impl.GroupDaoImpl;
 import org.devs.crm.dao.impl.query.GroupQuery;
 import org.devs.crm.dao.impl.rowMapper.GroupRowMapper;
-import org.devs.crm.model.Group;
+import org.devs.crm.entity.Group;
 
 import java.util.Optional;
 
