@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScans({
         @ComponentScan("org.devs.crm"),
-        @ComponentScan("org.devs.business")
+        @ComponentScan("org.devs.business.service")
 })
 public class BusinessConfig {
 }

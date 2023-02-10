@@ -1,5 +1,6 @@
 package org.devs.business;
 
+import org.devs.business.config.BusinessConfig;
 import org.devs.business.model.dto.GroupDto;
 import org.devs.business.model.request.CreateGroupRequest;
 import org.devs.business.service.GroupService;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 
 public class BusinessClass {
     public static void main(String[] args) {
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(BusinessClass.class);
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(BusinessConfig.class);
 
         GroupService groupService = applicationContext.getBean(GroupServiceImpl.class);
 
