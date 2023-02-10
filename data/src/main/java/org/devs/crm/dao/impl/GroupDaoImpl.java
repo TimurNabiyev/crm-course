@@ -7,6 +7,7 @@ import org.devs.crm.dao.MentorDao;
 import org.devs.crm.dao.StudentDao;
 import org.devs.crm.dao.exception.EntityNotFoundException;
 import org.devs.crm.dao.exception.InvalidIdException;
+import org.devs.crm.dao.exception.NullParameterPassedException;
 import org.devs.crm.dao.impl.query.GroupQuery;
 import org.devs.crm.dao.impl.rowMapper.GroupRowMapper;
 import org.devs.crm.model.Group;
@@ -79,5 +80,23 @@ public class GroupDaoImpl implements GroupDao {
         if (id <= 0) {
             throw new InvalidIdException("Expected id greater than 0 but was send: " + id);
         }
+    }
+
+    private void checkForNull(Object object) {
+        if (object == null) {
+            throw new NullParameterPassedException("Argument is null");
+        }
+    }
+
+    @Override
+    public Optional<Group> findByGroupName(String name) {
+        checkForNull(name);
+        return namedParameterJdbcTemplate.query(GroupQuery.SELECT_ONE_BY_GROUP_NAME,
+                new MapSqlParameterSource("groupName", name), groupRowMapper).stream().peek(group -> {
+            group.setCourse(courseDao.findByGroupId(group.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Course not found by id: " + group.getId())));
+            group.setMentors(mentorDao.findAllByGroupId(group.getId()));
+            group.setStudents(studentDao.findAllByGroupId(group.getId()));
+        }).findFirst();
     }
 }

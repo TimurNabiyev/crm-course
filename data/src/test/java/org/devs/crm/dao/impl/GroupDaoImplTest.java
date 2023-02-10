@@ -27,10 +27,15 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 @ExtendWith(SpringExtension.class) // Test run with Spring
@@ -118,7 +123,7 @@ class GroupDaoImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("groupsProviderGenerateException")
+    @MethodSource("groupsProviderGenerateNullPointerException")
     void shouldThrowExceptionOnSave(Group group) {
         Assertions.assertThatNullPointerException().isThrownBy(() -> groupDao.save(group));
     }
@@ -127,15 +132,70 @@ class GroupDaoImplTest {
 
     }
 
-    void shouldNotSave() {
+    @ParameterizedTest
+    @MethodSource("groupsProviderGenerateDataAccessException")
+    void shouldNotSaveAndThrowException(Group group) {
+        Assertions.assertThatNullPointerException().isThrownBy(() -> groupDao.save(group));
 
+        Optional<Group> optionalGroupFromDB = groupDao.findByGroupName(group.getGroupName());
+
+        Assertions.assertThat(optionalGroupFromDB.isPresent()).isFalse();
     }
 
-    private static Stream<Arguments> groupsProviderGenerateException() {
+    private static Stream<Arguments> groupsProviderGenerateNullPointerException() {
         return IntStream.range(1, 51).mapToObj(index -> Arguments.of(Group.builder()
                         .groupName("Group #" + index)
                         .startDate(LocalDate.now().plusDays(index))
                 .build()));
+    }
+
+
+    private static Stream<Arguments> groupsProviderGenerateDataAccessException() {
+        List<Arguments> arguments = new ArrayList<>();
+
+        List<Mentor> mentors = LongStream.range(1, 3)
+                .mapToObj(index -> Mentor.builder()
+                        .id(index)
+                        .email("mentorsemail" + index + "@gmail.com")
+                        .salary(BigDecimal.valueOf(index * 10000))
+                        .lastName("mentor lastname #" + index)
+                        .firstName("mentor firstname #" + index)
+                        .patronymic("mentor patronymic #" + index)
+                        .phoneNumber("+9989999999" + index)
+                        .build()).collect(Collectors.toList());
+
+        List<Student> students = LongStream.range(1, 5)
+                .mapToObj(index -> Student.builder()
+                        .id(index)
+                        .lastName("student lastname #" + index)
+                        .firstName("student firstname #" + index)
+                        .patronymic("student patronymic #" + index)
+                        .phoneNumber("+998999999" + index + "9")
+                        .email("studentemail" + index + "@gmail.com")
+                        .build()).collect(Collectors.toList());
+
+        Course course = Course.builder()
+                .id(1L)
+                .courseDurationInMonth(7)
+                .coursePrice(BigDecimal.valueOf(10000))
+                .lessonDuration(LocalTime.of(2, 0, 0))
+                .subject("Java")
+                .name("Java Backend")
+                .build();
+
+        arguments.add(Arguments.of(Group.builder().groupName("Group #1").startDate(LocalDate.now().plusDays(5))
+                .course(course).students(students).build()));
+
+        arguments.add(Arguments.of(Group.builder().groupName("Group #2").startDate(LocalDate.now().plusDays(5))
+                .students(students).mentors(mentors).build()));
+
+        arguments.add(Arguments.of(Group.builder().groupName("Group #3").startDate(LocalDate.now().plusDays(5))
+                .course(course).mentors(mentors).build()));
+
+        arguments.add(Arguments.of(Group.builder().groupName("Group #4").course(course).students(students)
+                .mentors(mentors).build()));
+
+        return arguments.stream();
     }
 
     private Group cloneGroup(Group group) {
