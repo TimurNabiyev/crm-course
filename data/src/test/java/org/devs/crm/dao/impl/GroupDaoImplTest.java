@@ -7,6 +7,7 @@ import org.devs.crm.dao.MentorDao;
 import org.devs.crm.dao.StudentDao;
 import org.devs.crm.dao.config.DaoConfig;
 import org.devs.crm.dao.exception.InvalidIdException;
+import org.devs.crm.dao.exception.NullParameterPassedException;
 import org.devs.crm.model.Course;
 import org.devs.crm.model.Group;
 import org.devs.crm.model.Mentor;
@@ -20,6 +21,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.test.context.ContextConfiguration;
@@ -123,29 +125,47 @@ class GroupDaoImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("groupsProviderGenerateNullPointerException")
+    @MethodSource("groupsProvider")
     void shouldThrowExceptionOnSave(Group group) {
-        Assertions.assertThatNullPointerException().isThrownBy(() -> groupDao.save(group));
+        Assertions.assertThatExceptionOfType(NullParameterPassedException.class).isThrownBy(() -> groupDao.save(group));
     }
 
-    void shouldSaveNew() {
 
+    @ParameterizedTest
+    @MethodSource("groupsProvider")
+    void shouldSaveNew(Group group) {
+        List<Student> students = studentDao.findAllByGroupId(3L);
+        List<Mentor> mentors = mentorDao.findAllByGroupId(2L);
+        Optional<Course> optionalCourse = courseDao.findByGroupId(1L);
+
+        group.setStudents(students);
+        group.setCourse(optionalCourse.get());
+        group.setMentors(mentors);
+
+        groupDao.save(group);
+
+        Optional<Group> saved = groupDao.findById(group.getId());
+
+        Assertions.assertThat(saved).isNotNull();
+        Assertions.assertThat(saved.isPresent()).isTrue();
+
+        Assertions.assertThat(group).usingRecursiveComparison().isEqualTo(saved.get());
     }
 
     @ParameterizedTest
     @MethodSource("groupsProviderGenerateDataAccessException")
     void shouldNotSaveAndThrowException(Group group) {
-        Assertions.assertThatNullPointerException().isThrownBy(() -> groupDao.save(group));
+        Assertions.assertThatExceptionOfType(DataAccessException.class).isThrownBy(() -> groupDao.save(group));
 
         Optional<Group> optionalGroupFromDB = groupDao.findByGroupName(group.getGroupName());
 
         Assertions.assertThat(optionalGroupFromDB.isPresent()).isFalse();
     }
 
-    private static Stream<Arguments> groupsProviderGenerateNullPointerException() {
+    private static Stream<Arguments> groupsProvider() {
         return IntStream.range(1, 51).mapToObj(index -> Arguments.of(Group.builder()
-                        .groupName("Group #" + index)
-                        .startDate(LocalDate.now().plusDays(index))
+                .groupName("Group #" + index)
+                .startDate(LocalDate.now().plusDays(index))
                 .build()));
     }
 
@@ -196,16 +216,5 @@ class GroupDaoImplTest {
                 .mentors(mentors).build()));
 
         return arguments.stream();
-    }
-
-    private Group cloneGroup(Group group) {
-        return Group.builder()
-                .id(group.getId())
-                .groupName(group.getGroupName())
-                .course(group.getCourse())
-                .mentors(group.getMentors())
-                .students(group.getStudents())
-                .startDate(group.getStartDate())
-                .build();
     }
 }
