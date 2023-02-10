@@ -1,9 +1,12 @@
 package org.devs.crm.dao.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.devs.crm.dao.CourseDao;
 import org.devs.crm.dao.GroupDao;
 import org.devs.crm.dao.MentorDao;
 import org.devs.crm.dao.StudentDao;
+import org.devs.crm.dao.exception.EntityNotFoundException;
+import org.devs.crm.dao.exception.InvalidIdException;
 import org.devs.crm.dao.impl.query.GroupQuery;
 import org.devs.crm.dao.impl.rowMapper.GroupRowMapper;
 import org.devs.crm.model.Group;
@@ -26,14 +29,18 @@ public class GroupDaoImpl implements GroupDao {
     private final GroupRowMapper groupRowMapper;
     private final StudentDao studentDao;
     private final MentorDao mentorDao;
+    private final CourseDao courseDao;
 
     @Override
     public Optional<Group> findById(Long id) {
-         return namedParameterJdbcTemplate.query(GroupQuery.SELECT_ONE,
+        checkId(id);
+        return namedParameterJdbcTemplate.query(GroupQuery.SELECT_ONE,
                 new MapSqlParameterSource("id", id), groupRowMapper).stream().peek(group -> {
-                    group.setMentors(mentorDao.findAllByGroupId(id));
-                    group.setStudents(studentDao.findAllByGroupId(id));
-         }).findFirst();
+            group.setCourse(courseDao.findByGroupId(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Course not found by id: " + id)));
+            group.setMentors(mentorDao.findAllByGroupId(id));
+            group.setStudents(studentDao.findAllByGroupId(id));
+        }).findFirst();
     }
 
     @Override
@@ -57,8 +64,8 @@ public class GroupDaoImpl implements GroupDao {
     private void saveToStudentJunction(List<Student> students, Long groupId) { // {1, 5, 7, 15},    2
         students.forEach(student -> namedParameterJdbcTemplate.update(GroupQuery.INSERT_STUDENTS_JOINED,
                 new MapSqlParameterSource()
-                .addValue("group_id", groupId)
-                .addValue("student_id", student.getId())));
+                        .addValue("group_id", groupId)
+                        .addValue("student_id", student.getId())));
     }
 
     private void saveToMentorJunction(List<Mentor> mentors, Long groupId) {
@@ -66,5 +73,11 @@ public class GroupDaoImpl implements GroupDao {
                 new MapSqlParameterSource()
                         .addValue("group_id", groupId)
                         .addValue("mentor_id", mentor.getId())));
+    }
+
+    private void checkId(Long id) {
+        if (id <= 0) {
+            throw new InvalidIdException("Expected id greater than 0 but was send: " + id);
+        }
     }
 }

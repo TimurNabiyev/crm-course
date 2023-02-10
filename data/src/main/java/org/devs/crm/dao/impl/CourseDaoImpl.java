@@ -23,6 +23,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public Optional<Course> findById(Long id) {
 
+
         return namedParameterJdbcTemplate.query(CourseQuery.SELECT_ONE,
                 new MapSqlParameterSource("id", id), courseRowMapper).stream().findFirst();
     }
@@ -42,5 +43,11 @@ public class CourseDaoImpl implements CourseDao {
         course.setId(keyHolder.getKeyAs(Long.class));
         
         return course;
+    }
+
+    @Override
+    public Optional<Course> findByGroupId(Long id) {
+        return namedParameterJdbcTemplate.query(CourseQuery.SELECT_ONE_BY_GROUP,
+                new MapSqlParameterSource("id", id), courseRowMapper).stream().findFirst();
     }
 }
