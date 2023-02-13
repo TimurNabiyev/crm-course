@@ -1,13 +1,14 @@
 package org.devs.crm.dao.impl;
 
 
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
 import org.assertj.core.api.Assertions;
 import org.devs.crm.dao.GroupDao;
 import org.devs.crm.dao.MentorDao;
 import org.devs.crm.dao.config.DaoConfig;
 import org.devs.crm.dao.exception.InvalidIdException;
-import org.devs.crm.model.Mentor;
+import org.devs.crm.dao.exception.NullParameterPassedException;
+import org.devs.crm.entity.Group;
+import org.devs.crm.entity.Mentor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +17,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.test.context.ContextConfiguration;
@@ -26,9 +27,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 @ExtendWith(SpringExtension.class)
@@ -60,7 +64,7 @@ public class MentorDaoImplTest {
     @ValueSource(longs = {1, 2, 3, 4, 5, 6, 7, 8, 9})
     void shouldFindById(Long mentorId) {
         Optional<Mentor> optionalMentor = mentorDao.findById(mentorId);
-        List<Mentor> mentorList = mentorDao.findAllByGroupId(mentorId);
+
 
         Assertions.assertThat(optionalMentor).isNotNull();
         Assertions.assertThat(optionalMentor.isPresent()).isTrue();
@@ -75,7 +79,7 @@ public class MentorDaoImplTest {
         Assertions.assertThat(mentor.getPhoneNumber()).isNotNull();
         Assertions.assertThat(mentor.getSalary()).isNotNull();
 
-        Assertions.assertThat(mentorList).isNotNull();
+
     }
 
     @DisplayName("Should throw InvalidIdException")
@@ -96,28 +100,59 @@ public class MentorDaoImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("mentorsProviderGenerateException")
+    @MethodSource("mentorsProvider")
     void shouldThrowExceptionOnSave(Mentor mentor) {
-        Assertions.assertThatNullPointerException().isThrownBy(() -> mentorDao.save(mentor));
+        Assertions.assertThatExceptionOfType(NullParameterPassedException.class).isThrownBy(() -> mentorDao.save(mentor));
     }
 
-    void shouldSaveNew(){
+    @ParameterizedTest
+    @MethodSource("mentorsProvider")
+    void shouldSaveNew(Mentor mentor){
+        Optional<Mentor> optionalMentor = mentorDao.findById(2L);
+
+        mentorDao.save(mentor);
+
+        Optional<Mentor> saved = mentorDao.findById(mentor.getId());
+
+        Assertions.assertThat(saved).isNotNull();
+        Assertions.assertThat(saved.isPresent()).isTrue();
+
+        Assertions.assertThat(mentor).usingRecursiveComparison().isEqualTo(saved.get());
+    }
+
+
+
+    @ParameterizedTest
+    @MethodSource("mentorsProviderGenerateDataAccessException")
+    void shouldNotSaveAndThrowException(Mentor mentor){
+        Assertions.assertThatExceptionOfType(DataAccessException.class).isThrownBy(() -> mentorDao.save(mentor));
+
+        Optional<Mentor> optionalMentorFromDB = mentorDao.findByMentorName(mentor.getFirstName());
+
+        Assertions.assertThat(optionalMentorFromDB).isNotNull();
+        Assertions.assertThat(optionalMentorFromDB).isPresent();
 
     }
 
-    void shouldNotSave(){
-
-    }
-
-    private static Stream<Arguments> mentorsProviderGenerateException() {
-        return IntStream.range(1,100).mapToObj(index -> Arguments.of(Mentor.builder()
-                .firstName("Name " + index)
-                .lastName("Last")
-                .patronymic("Patronymic")
-                .email("KSLADASDKAS2342342@akl;ms.ewre")
-                .phoneNumber("545465465466")
-                .salary(BigDecimal.valueOf(654554))
+    private static Stream<Arguments> mentorsProvider() {
+        return IntStream.range(1, 20).mapToObj(index -> Arguments.of(Mentor.builder()
+                .firstName("Name #" + index)
+                .lastName("Last name")
+                .patronymic("Patronus")
+                .email("asdasda@mail.ru")
+                .phoneNumber("+9898989898989898")
+                .salary(BigDecimal.valueOf(56465))
                 .build()));
+    }
+
+    private static Stream<Arguments> mentorsProviderGenerateDataAccessException() {
+        List<Arguments> arguments = new ArrayList<>();
+
+                arguments.add(Arguments.of(Mentor.builder().firstName("Name #1").lastName("Last name")
+                        .patronymic("Patronum").email("jkhjjkhl").phoneNumber("96456456546")
+                        .salary(BigDecimal.valueOf(654554)).build()));
+
+        return arguments.stream();
     }
 
     private Mentor cloneMentor(Mentor mentor) {

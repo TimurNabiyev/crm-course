@@ -4,7 +4,7 @@ import org.devs.crm.dao.exception.InvalidIdException;
 import org.devs.crm.dao.impl.MentorDaoImpl;
 import org.devs.crm.dao.impl.query.MentorQuery;
 import org.devs.crm.dao.impl.rowMapper.MentorRowMapper;
-import org.devs.crm.model.Mentor;
+import org.devs.crm.entity.Mentor;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,5 +34,13 @@ public interface MentorDao extends BaseDao<Mentor> {
      * @throws InvalidIdException if id is null, less than or equal to zero
      */
     List<Mentor> findAllByGroupId(Long groupId);
+
+    /**
+     * <p>Retrieves an entity by its firstName</p>
+     * @param first_name must not be null
+     * @return entity with assigned id wrapped in {@link Optional} or {@link Optional#empty()} if none found
+     * @throws InvalidIdException if firstName is null
+     */
+    Optional<Mentor> findByMentorName(String first_name);
 
 }
