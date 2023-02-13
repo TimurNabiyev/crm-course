@@ -6,5 +6,6 @@ import org.devs.business.model.request.CreateGroupRequest;
 public interface GroupService {
 
     GroupDto create(CreateGroupRequest group);
+    GroupDto getOne(Long id);
 
 }

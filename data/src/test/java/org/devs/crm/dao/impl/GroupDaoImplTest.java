@@ -147,7 +147,7 @@ class GroupDaoImplTest {
         Optional<Group> saved = groupDao.findById(group.getId());
 
         Assertions.assertThat(saved).isNotNull();
-        Assertions.assertThat(saved.isPresent()).isTrue();
+        Assertions.assertThat(saved).isPresent();
 
         Assertions.assertThat(group).usingRecursiveComparison().isEqualTo(saved.get());
     }
@@ -159,7 +159,8 @@ class GroupDaoImplTest {
 
         Optional<Group> optionalGroupFromDB = groupDao.findByGroupName(group.getGroupName());
 
-        Assertions.assertThat(optionalGroupFromDB.isPresent()).isFalse();
+        Assertions.assertThat(optionalGroupFromDB).isNotNull();
+        Assertions.assertThat(optionalGroupFromDB).isNotPresent();
     }
 
     private static Stream<Arguments> groupsProvider() {

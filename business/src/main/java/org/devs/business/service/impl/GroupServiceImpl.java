@@ -1,10 +1,11 @@
 package org.devs.business.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.devs.business.model.dto.CourseDto;
+import org.devs.business.exception.GroupNotFoundException;
+import org.devs.business.mapper.GroupMapper;
 import org.devs.business.model.dto.GroupDto;
-import org.devs.business.model.dto.MentorDto;
-import org.devs.business.model.dto.StudentDto;
 import org.devs.business.model.request.CreateGroupRequest;
 import org.devs.business.service.GroupService;
 import org.devs.crm.dao.CourseDao;
@@ -15,13 +16,10 @@ import org.devs.crm.entity.Course;
 import org.devs.crm.entity.Group;
 import org.devs.crm.entity.Mentor;
 import org.devs.crm.entity.Student;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Component
+@Service
 @RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
 
@@ -29,10 +27,16 @@ public class GroupServiceImpl implements GroupService {
     private final StudentDao studentDao;
     private final MentorDao mentorDao;
     private final CourseDao courseDao;
+    private final GroupMapper groupMapper;
 
     @Override
     @Transactional
     public GroupDto create(CreateGroupRequest req) {
+
+        if (req == null || req.getGroupName().isEmpty() || req.getCourseId() == null || req.getMentorsIds().isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         List<Student> students = req.getStudentsIds().stream()
                 .map(id -> studentDao.findById(id).orElseThrow(RuntimeException::new)).collect(Collectors.toList());
 
@@ -51,35 +55,11 @@ public class GroupServiceImpl implements GroupService {
 
         groupDao.save(group);
 
-        return mapToDto(group);
+        return groupMapper.toDto(group);
     }
 
-    private GroupDto mapToDto(Group entity) {
-        CourseDto courseDto = new CourseDto(entity.getCourse().getId(),
-                entity.getCourse().getName(),
-                entity.getCourse().getSubject(),
-                entity.getCourse().getCourseDurationInMonth(),
-                entity.getCourse().getLessonDuration(),
-                entity.getCourse().getCoursePrice());
-
-        List<StudentDto> studentDtos = entity.getStudents().stream()
-                .map(entitySt -> new StudentDto(entitySt.getId(),
-                        entitySt.getFirstName(),
-                        entitySt.getLastName(),
-                        entitySt.getPatronymic(),
-                        entitySt.getEmail(),
-                        entitySt.getPhoneNumber(),
-                        null)).collect(Collectors.toList());
-
-        List<MentorDto> mentorDtos = entity.getMentors().stream()
-                .map(entityMen -> new MentorDto(entityMen.getId(),
-                        entityMen.getFirstName(),
-                        entityMen.getLastName(),
-                        entityMen.getPatronymic(),
-                        entityMen.getEmail(),
-                        entityMen.getPhoneNumber(),
-                        entityMen.getSalary())).collect(Collectors.toList());
-
-        return new GroupDto(entity.getId(), entity.getGroupName(), courseDto, studentDtos, mentorDtos, entity.getStartDate());
+    @Override
+    public GroupDto getOne(Long id) {
+        return groupMapper.toDto(groupDao.findById(id).orElseThrow(() -> new GroupNotFoundException("For id=" + id)));
     }
 }

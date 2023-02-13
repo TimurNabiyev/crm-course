@@ -1,5 +1,7 @@
 package org.devs.crm.dao.impl;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.devs.crm.dao.MentorDao;
 import org.devs.crm.dao.impl.query.MentorQuery;
@@ -9,12 +11,9 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
-@Component
+@Repository
 @RequiredArgsConstructor
 public class MentorDaoImpl implements MentorDao {
 
