@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.devs.crm.dao.CourseDao;
 import org.devs.crm.dao.impl.query.CourseQuery;
 import org.devs.crm.dao.impl.rowMapper.CourseRowMapper;
-import org.devs.crm.model.Course;
+import org.devs.crm.entity.Course;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;

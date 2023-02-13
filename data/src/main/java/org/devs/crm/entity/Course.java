@@ -1,4 +1,4 @@
-package org.devs.crm.model;
+package org.devs.crm.entity;
 
 import lombok.*;
 

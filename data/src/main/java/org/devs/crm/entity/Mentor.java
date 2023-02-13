@@ -1,8 +1,8 @@
-package org.devs.crm.model;
+package org.devs.crm.entity;
 
 import lombok.*;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -10,7 +10,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student {
+public class Mentor {
 
     private Long id;
     private String firstName;
@@ -18,6 +18,6 @@ public class Student {
     private String patronymic;
     private String email;
     private String phoneNumber;
-    private List<Group> groups;
+    private BigDecimal salary;
 
 }

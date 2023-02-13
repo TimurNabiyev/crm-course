@@ -1,6 +1,6 @@
 package org.devs.crm.dao;
 
-import org.devs.crm.model.Mentor;
+import org.devs.crm.entity.Mentor;
 
 import java.util.List;
 

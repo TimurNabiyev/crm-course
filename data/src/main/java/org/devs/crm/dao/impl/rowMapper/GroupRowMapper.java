@@ -1,7 +1,7 @@
 package org.devs.crm.dao.impl.rowMapper;
 
 import lombok.RequiredArgsConstructor;
-import org.devs.crm.model.Group;
+import org.devs.crm.entity.Group;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 

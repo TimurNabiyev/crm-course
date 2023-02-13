@@ -1,6 +1,6 @@
 package org.devs.crm.dao;
 
-import org.devs.crm.model.Course;
+import org.devs.crm.entity.Course;
 
 import java.util.Optional;
 
