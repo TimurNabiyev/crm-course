@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.devs.crm.dao.MentorDao;
 import org.devs.crm.dao.impl.query.MentorQuery;
 import org.devs.crm.dao.impl.rowMapper.MentorRowMapper;
-import org.devs.crm.model.Mentor;
+import org.devs.crm.entity.Mentor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;

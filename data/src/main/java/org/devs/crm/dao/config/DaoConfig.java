@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 
@@ -41,6 +44,19 @@ public class DaoConfig {
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
     }
+
+    @Bean
+    @Autowired
+    public PlatformTransactionManager platformTransactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean
+    @Autowired
+    public TransactionTemplate transactionTemplate(PlatformTransactionManager platformTransactionManager) {
+        return new TransactionTemplate(platformTransactionManager);
+    }
+
 }
 
 // CRUD(DML): CREATE(INSERT) READ(SELECT) UPDATE(UPDATE) DELETE(DELETE)

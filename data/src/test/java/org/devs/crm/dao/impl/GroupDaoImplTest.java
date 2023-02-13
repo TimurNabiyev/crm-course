@@ -7,10 +7,11 @@ import org.devs.crm.dao.MentorDao;
 import org.devs.crm.dao.StudentDao;
 import org.devs.crm.dao.config.DaoConfig;
 import org.devs.crm.dao.exception.InvalidIdException;
-import org.devs.crm.model.Course;
-import org.devs.crm.model.Group;
-import org.devs.crm.model.Mentor;
-import org.devs.crm.model.Student;
+import org.devs.crm.dao.exception.NullParameterPassedException;
+import org.devs.crm.entity.Course;
+import org.devs.crm.entity.Group;
+import org.devs.crm.entity.Mentor;
+import org.devs.crm.entity.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,10 +29,15 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 @ExtendWith(SpringExtension.class) // Test run with Spring
@@ -119,34 +126,96 @@ class GroupDaoImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("groupsProviderGenerateException")
+    @MethodSource("groupsProvider")
     void shouldThrowExceptionOnSave(Group group) {
-        Assertions.assertThatNullPointerException().isThrownBy(() -> groupDao.save(group));
+        Assertions.assertThatExceptionOfType(NullParameterPassedException.class).isThrownBy(() -> groupDao.save(group));
     }
 
-    void shouldSaveNew() {
 
+    @ParameterizedTest
+    @MethodSource("groupsProvider")
+    void shouldSaveNew(Group group) {
+        List<Student> students = studentDao.findAllByGroupId(3L);
+        List<Mentor> mentors = mentorDao.findAllByGroupId(2L);
+        Optional<Course> optionalCourse = courseDao.findByGroupId(1L);
+
+        group.setStudents(students);
+        group.setCourse(optionalCourse.get());
+        group.setMentors(mentors);
+
+        groupDao.save(group);
+
+        Optional<Group> saved = groupDao.findById(group.getId());
+
+        Assertions.assertThat(saved).isNotNull();
+        Assertions.assertThat(saved.isPresent()).isTrue();
+
+        Assertions.assertThat(group).usingRecursiveComparison().isEqualTo(saved.get());
     }
 
-    void shouldNotSave() {
+    @ParameterizedTest
+    @MethodSource("groupsProviderGenerateDataAccessException")
+    void shouldNotSaveAndThrowException(Group group) {
+        Assertions.assertThatExceptionOfType(DataAccessException.class).isThrownBy(() -> groupDao.save(group));
 
+        Optional<Group> optionalGroupFromDB = groupDao.findByGroupName(group.getGroupName());
+
+        Assertions.assertThat(optionalGroupFromDB.isPresent()).isFalse();
     }
 
-    private static Stream<Arguments> groupsProviderGenerateException() {
+    private static Stream<Arguments> groupsProvider() {
         return IntStream.range(1, 51).mapToObj(index -> Arguments.of(Group.builder()
                 .groupName("Group #" + index)
                 .startDate(LocalDate.now().plusDays(index))
                 .build()));
     }
 
-    private Group cloneGroup(Group group) {
-        return Group.builder()
-                .id(group.getId())
-                .groupName(group.getGroupName())
-                .course(group.getCourse())
-                .mentors(group.getMentors())
-                .students(group.getStudents())
-                .startDate(group.getStartDate())
+
+    private static Stream<Arguments> groupsProviderGenerateDataAccessException() {
+        List<Arguments> arguments = new ArrayList<>();
+
+        List<Mentor> mentors = LongStream.range(1, 3)
+                .mapToObj(index -> Mentor.builder()
+                        .id(index)
+                        .email("mentorsemail" + index + "@gmail.com")
+                        .salary(BigDecimal.valueOf(index * 10000))
+                        .lastName("mentor lastname #" + index)
+                        .firstName("mentor firstname #" + index)
+                        .patronymic("mentor patronymic #" + index)
+                        .phoneNumber("+9989999999" + index)
+                        .build()).collect(Collectors.toList());
+
+        List<Student> students = LongStream.range(1, 5)
+                .mapToObj(index -> Student.builder()
+                        .id(index)
+                        .lastName("student lastname #" + index)
+                        .firstName("student firstname #" + index)
+                        .patronymic("student patronymic #" + index)
+                        .phoneNumber("+998999999" + index + "9")
+                        .email("studentemail" + index + "@gmail.com")
+                        .build()).collect(Collectors.toList());
+
+        Course course = Course.builder()
+                .id(1L)
+                .courseDurationInMonth(7)
+                .coursePrice(BigDecimal.valueOf(10000))
+                .lessonDuration(LocalTime.of(2, 0, 0))
+                .subject("Java")
+                .name("Java Backend")
                 .build();
+
+        arguments.add(Arguments.of(Group.builder().groupName("Group #1").startDate(LocalDate.now().plusDays(5))
+                .course(course).students(students).build()));
+
+        arguments.add(Arguments.of(Group.builder().groupName("Group #2").startDate(LocalDate.now().plusDays(5))
+                .students(students).mentors(mentors).build()));
+
+        arguments.add(Arguments.of(Group.builder().groupName("Group #3").startDate(LocalDate.now().plusDays(5))
+                .course(course).mentors(mentors).build()));
+
+        arguments.add(Arguments.of(Group.builder().groupName("Group #4").course(course).students(students)
+                .mentors(mentors).build()));
+
+        return arguments.stream();
     }
 }

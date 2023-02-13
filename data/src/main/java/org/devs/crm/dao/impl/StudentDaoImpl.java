@@ -4,7 +4,7 @@ import org.devs.crm.dao.GroupDao;
 import org.devs.crm.dao.StudentDao;
 import org.devs.crm.dao.impl.query.StudentQuery;
 import org.devs.crm.dao.impl.rowMapper.StudentRowMapper;
-import org.devs.crm.model.Student;
+import org.devs.crm.entity.Student;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
