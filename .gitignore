@@ -1,0 +1,14 @@
+.idea
+
+
+/data/src/main/resources/.env
+/business/src/main/resources/.env
+
+/data/src/test/resources/.env
+
+/target/
+/data/target/
+/business/target/
+
+data/src/main/main.iml
+business/src/main/main.iml
