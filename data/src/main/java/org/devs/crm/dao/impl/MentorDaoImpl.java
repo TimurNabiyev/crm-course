@@ -35,7 +35,7 @@ public class MentorDaoImpl implements MentorDao {
         MapSqlParameterSource source = new MapSqlParameterSource()
                 .addValue("fname", mentor.getFirstName())
                 .addValue("lname", mentor.getLastName())
-                .addValue("paronymic", mentor.getEmail())
+                .addValue("patronymic", mentor.getEmail())
                 .addValue("email", mentor.getEmail())
                 .addValue("phone_number", mentor.getPhoneNumber())
                 .addValue("salary", mentor.getSalary());
