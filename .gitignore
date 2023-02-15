@@ -1,6 +1,7 @@
 .idea
 
 
+
 /data/src/main/resources/.env
 /business/src/main/resources/.env
 
@@ -9,6 +10,9 @@
 /target/
 /data/target/
 /business/target/
+/web/target/
+
+/out/
 
 data/src/main/main.iml
 business/src/main/main.iml
