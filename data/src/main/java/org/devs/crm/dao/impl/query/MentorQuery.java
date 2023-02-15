@@ -14,7 +14,7 @@ public class MentorQuery {
                     "VALUES(:first_name, :last_name, :patronymic, :email, :phone_number, :salary);";
 
     public static final String SELECT_ONE_BY_MENTOR_NAME = "" +
-            "SELECT * FROM tb_mentors m" +
+            "SELECT * FROM tb_mentors m " +
             "WHERE m.first_name = :first_name";
 
 }

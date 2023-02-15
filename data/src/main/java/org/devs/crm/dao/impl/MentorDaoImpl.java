@@ -1,27 +1,23 @@
 package org.devs.crm.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.devs.crm.dao.GroupDao;
 import org.devs.crm.dao.MentorDao;
 import org.devs.crm.dao.exception.InvalidIdException;
 import org.devs.crm.dao.exception.NullParameterPassedException;
-import org.devs.crm.dao.impl.query.GroupQuery;
 import org.devs.crm.dao.impl.query.MentorQuery;
-import org.devs.crm.dao.impl.rowMapper.GroupRowMapper;
 import org.devs.crm.dao.impl.rowMapper.MentorRowMapper;
-import org.devs.crm.entity.Group;
 import org.devs.crm.entity.Mentor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class MentorDaoImpl implements MentorDao {
 
