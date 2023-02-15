@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 public class CreateMentorRequest {
 
 
-    private Long id;
     private String firstName;
     private String lastName;
     private String patronymic;

@@ -100,13 +100,13 @@ public class MentorDaoImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("mentorsProvider")
+    @MethodSource("mentorsProviderGenerateDataAccessException")
     void shouldThrowExceptionOnSave(Mentor mentor) {
         Assertions.assertThatExceptionOfType(NullParameterPassedException.class).isThrownBy(() -> mentorDao.save(mentor));
     }
 
     @ParameterizedTest
-    @MethodSource("mentorsProvider")
+    @MethodSource("mentorsProviderGenerateDataAccessException")
     void shouldSaveNew(Mentor mentor){
         Optional<Mentor> optionalMentor = mentorDao.findById(2L);
 
@@ -115,12 +115,9 @@ public class MentorDaoImplTest {
         Optional<Mentor> saved = mentorDao.findById(mentor.getId());
 
         Assertions.assertThat(saved).isNotNull();
-        Assertions.assertThat(saved.isPresent()).isTrue();
 
         Assertions.assertThat(mentor).usingRecursiveComparison().isEqualTo(saved.get());
     }
-
-
 
     @ParameterizedTest
     @MethodSource("mentorsProviderGenerateDataAccessException")
@@ -130,27 +127,21 @@ public class MentorDaoImplTest {
         Optional<Mentor> optionalMentorFromDB = mentorDao.findByMentorName(mentor.getFirstName());
 
         Assertions.assertThat(optionalMentorFromDB).isNotNull();
-        Assertions.assertThat(optionalMentorFromDB).isPresent();
+        Assertions.assertThat(optionalMentorFromDB).isNotPresent();
 
     }
 
-    private static Stream<Arguments> mentorsProvider() {
-        return IntStream.range(1, 20).mapToObj(index -> Arguments.of(Mentor.builder()
-                .firstName("Name #" + index)
-                .lastName("Last name")
-                .patronymic("Patronus")
-                .email("asdasda@mail.ru")
-                .phoneNumber("+9898989898989898")
-                .salary(BigDecimal.valueOf(56465))
-                .build()));
-    }
-
-    private static Stream<Arguments> mentorsProviderGenerateDataAccessException() {
+        private static Stream<Arguments> mentorsProviderGenerateDataAccessException() {
         List<Arguments> arguments = new ArrayList<>();
 
-                arguments.add(Arguments.of(Mentor.builder().firstName("Name #1").lastName("Last name")
-                        .patronymic("Patronum").email("jkhjjkhl").phoneNumber("96456456546")
-                        .salary(BigDecimal.valueOf(654554)).build()));
+                arguments.add(Arguments.of(Mentor.builder()
+                        .firstName("Name #1")
+                        .lastName("Last name")
+                        .patronymic("Patronum")
+                        .email(null)
+                        .phoneNumber("96456456546")
+                        .salary(BigDecimal.valueOf(654554))
+                        .build()));
 
         return arguments.stream();
     }

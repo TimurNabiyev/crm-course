@@ -6,4 +6,5 @@ import org.devs.business.model.request.CreateMentorRequest;
 public interface MentorService {
 
     MentorDto create(CreateMentorRequest mentor);
+    MentorDto getOne(Long id);
 }
