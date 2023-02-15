@@ -33,10 +33,6 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupDto create(CreateGroupRequest req) {
 
-        if (req == null || req.getGroupName().isEmpty() || req.getCourseId() == null || req.getMentorsIds().isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-
         List<Student> students = req.getStudentsIds().stream()
                 .map(id -> studentDao.findById(id).orElseThrow(RuntimeException::new)).collect(Collectors.toList());
 
