@@ -10,9 +10,9 @@ public class GroupDto {
 
     private final Long id;
     private final String groupName;
-    private final CourseDto courseDto;
-    private final List<StudentDto> studentDtos;
-    private final List<MentorDto> mentorDtos;
+    private final CourseDto course;
+    private final List<StudentDto> students;
+    private final List<MentorDto> mentors;
     private final LocalDate startDate;
 
 }

@@ -56,7 +56,6 @@ public class DaoConfig {
     public TransactionTemplate transactionTemplate(PlatformTransactionManager platformTransactionManager) {
         return new TransactionTemplate(platformTransactionManager);
     }
-
 }
 
 // CRUD(DML): CREATE(INSERT) READ(SELECT) UPDATE(UPDATE) DELETE(DELETE)
