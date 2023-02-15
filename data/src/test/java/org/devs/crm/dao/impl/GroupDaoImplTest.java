@@ -3,7 +3,7 @@ package org.devs.crm.dao.impl;
 import org.assertj.core.api.Assertions;
 import org.devs.crm.dao.GroupDao;
 import org.devs.crm.dao.config.DaoConfig;
-import org.devs.crm.model.Group;
+import org.devs.crm.entity.Group;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -18,7 +18,7 @@ public class BusinessClass {
         GroupService groupService = applicationContext.getBean(GroupServiceImpl.class);
 
         CreateGroupRequest request = new CreateGroupRequest();
-        request.setCourseId(null);
+        request.setCourseId(1L);
         request.setMentorsIds(Arrays.asList(1L, 2L, 3L, 4L));
         request.setGroupName("Apple");
         request.setStartDate(LocalDate.now().plusDays(7));
@@ -26,6 +26,6 @@ public class BusinessClass {
 
         GroupDto dto = groupService.create(request);
 
-        System.out.println(groupService.getOne(7L));
+        System.out.println(groupService.getOne(20L));
     }
 }
