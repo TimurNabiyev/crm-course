@@ -1,12 +1,13 @@
 package org.devs.business.model.dto;
 
+import java.io.Serializable;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class GroupDto {
+public class GroupDto implements Serializable {
 
     private final Long id;
     private final String groupName;

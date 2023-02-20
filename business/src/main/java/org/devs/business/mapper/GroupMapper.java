@@ -6,10 +6,10 @@ import org.devs.business.model.dto.CourseDto;
 import org.devs.business.model.dto.GroupDto;
 import org.devs.business.model.dto.MentorDto;
 import org.devs.business.model.dto.StudentDto;
-import org.devs.crm.entity.Course;
-import org.devs.crm.entity.Group;
-import org.devs.crm.entity.Mentor;
-import org.devs.crm.entity.Student;
+import org.devs.data.entity.Course;
+import org.devs.data.entity.Group;
+import org.devs.data.entity.Mentor;
+import org.devs.data.entity.Student;
 import org.springframework.stereotype.Component;
 
 @Component

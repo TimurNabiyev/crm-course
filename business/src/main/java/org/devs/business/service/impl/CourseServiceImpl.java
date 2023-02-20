@@ -8,8 +8,8 @@ import org.devs.business.model.dto.CourseDto;
 import org.devs.business.model.request.CreateCourseRequest;
 
 import org.devs.business.service.CourseService;
-import org.devs.crm.dao.CourseDao;
-import org.devs.crm.entity.Course;
+import org.devs.data.dao.CourseDao;
+import org.devs.data.entity.Course;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

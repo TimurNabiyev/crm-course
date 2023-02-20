@@ -1,7 +1,7 @@
 package org.devs.business.mapper;
 
 import org.devs.business.model.dto.CourseDto;
-import org.devs.crm.entity.Course;
+import org.devs.data.entity.Course;
 import org.springframework.stereotype.Component;
 
 
